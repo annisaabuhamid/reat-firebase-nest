@@ -1,13 +1,14 @@
 import {
   Outlet,
 } from "react-router-dom";
+import NavBar from "./components/NavBar";
 
 
 const App = () => {
 
   return (
     <div>
-      <h1>sharing components</h1>
+     <NavBar/>
       <main>
         <Outlet />
         </main>

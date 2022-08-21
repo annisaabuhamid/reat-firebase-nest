@@ -38,8 +38,8 @@
 } */
 .container{
   padding:10px;
-  color:white;
-  background-color: blue;
+  /* color:white; */
+  background-color: lightgray;
   display: flex;
   align-items: center;
   justify-content: center;

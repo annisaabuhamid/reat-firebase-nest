@@ -1,3 +1,5 @@
+import { Box,List,ListItem,ListItemButton,ListItemIcon,ListItemText } from '@mui/material';
+
 import {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { routeNames } from '../routes/routeNames';
@@ -25,6 +27,18 @@ const LandingPage = () => {
   }})
   return (
     <div className='container'>
+
+      <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+         <List>
+            <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary="Inbox" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Box>
       <input type="text" id="name"  onChange={updateNameState} />
       <input type="text" id="desc"  onChange={updateDescState} />
       { /* add a way to route */}
