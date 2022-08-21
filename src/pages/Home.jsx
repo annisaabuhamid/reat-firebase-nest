@@ -1,4 +1,4 @@
-import { useLocation, useRoutes } from 'react-router-dom';
+import { useLocation, useParams, useRoutes } from 'react-router-dom';
 import '../styles/App.css';
 
 
@@ -7,6 +7,8 @@ const Home = () => {
 
 const location = useLocation()
 const {state} = location
+
+
 
   return (
     <div >

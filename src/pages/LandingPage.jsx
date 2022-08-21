@@ -13,17 +13,22 @@ const LandingPage = () => {
     const value = element.target.value;
     setName(value);
   }
+  const [desc, setDesc ] = useState('desc');
+  const updateDescState = (element) =>{
+    const value = element.target.value;
+    setDesc(value);
+  }
+  const navigateToHome = () =>
+  navigate(routeNames.HOME,{state:{
+    firstName:name,
+    desc:desc
+  }})
   return (
     <div className='container'>
-      <p>My Name is : {name}</p>
       <input type="text" id="name"  onChange={updateNameState} />
+      <input type="text" id="desc"  onChange={updateDescState} />
       { /* add a way to route */}
-      
-      <button onClick={() => {  navigate(routeNames.HOME,{state:{
-          firstName:'annisa',
-          desc:'try'
-        }})
-      }}>Home</button>
+      <button onClick={navigateToHome}>Home</button>
     </div>
   );
 }
