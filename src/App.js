@@ -1,25 +1,18 @@
-import {useState} from 'react';
-// import logo from './logo.svg';
-import './App.css';
+import {
+  Outlet,
+} from "react-router-dom";
 
 
-//es6
-//Hook
-//mutate
-//name hold the value, setNAme for change the value
 const App = () => {
 
-  const [name, setName ] = useState('hi');
-  const updateNameState = (element) =>{
-    const value = element.target.value;
-    setName(value);
-  }
   return (
-    <div className='container'>
-      <p>My Name is : {name}</p>
-      <input type="text" id="name"  onChange={updateNameState} />
+    <div>
+      <h1>sharing components</h1>
+      <main>
+        <Outlet />
+        </main>
     </div>
-  );
+  )
 }
 
 export default App;
