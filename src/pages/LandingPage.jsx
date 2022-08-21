@@ -19,7 +19,11 @@ const LandingPage = () => {
       <input type="text" id="name"  onChange={updateNameState} />
       { /* add a way to route */}
       
-      <button onClick={() => {  navigate(routeNames.HOME)  }}>Home</button>
+      <button onClick={() => {  navigate(routeNames.HOME,{state:{
+          firstName:'annisa',
+          desc:'try'
+        }})
+      }}>Home</button>
     </div>
   );
 }

@@ -1,16 +1,17 @@
-import {useState} from 'react';
-// import logo from './logo.svg';
+import { useLocation, useRoutes } from 'react-router-dom';
 import '../styles/App.css';
 
 
 
 const Home = () => {
 
+const location = useLocation()
+const {state} = location
 
   return (
     <div >
-      <p>second section</p>
-      
+      <p>hi {state.firstName}</p>
+      <p>{state.desc}</p>
     </div>
   );
 }
