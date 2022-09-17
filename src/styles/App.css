@@ -39,10 +39,20 @@
 .container{
   padding:10px;
   /* color:white; */
-  background-color: lightgray;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height:100vh;
+  height:50vh;
+}
+.row {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  margin:20px 20px;
+}
+
+.row > *:not(:last-child) {
+  margin-right: .5rem;
 }
