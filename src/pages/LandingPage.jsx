@@ -24,6 +24,11 @@ const LandingPage = () => {
    */
 
   const [todolist, setTodolist ] = useState([]);
+  
+  const [completedtodolist, setCompletedtodolist ] = useState([]);
+  
+  const [deletedtodolist, setDeletedtodolist ] = useState([]);
+  
   const [todo,setTodo] = useState('');
   
   const saveTodo = () =>{
@@ -48,12 +53,25 @@ const LandingPage = () => {
   
   const completedTodo =(id) => {
     const cloneArray = [...todolist] //[...] spread operator
-    const getTodoID = cloneArray.find((eachTodo) => eachTodo.id === id)
+    const getTodoID = cloneArray.findIndex((eachTodo) => eachTodo.id === id)
 
-    if (getTodoID){
-      getTodoID.status = TODO_STATUS.COMPLETED
+
+    if (getTodoID !== -1){
+      const completedArr = [...completedtodolist] //[...] spread operator
+
+      //push new recod to array
+      completedArr.push({
+        ...cloneArray[getTodoID],
+        status: TODO_STATUS.COMPLETED
+      })
+
+      setCompletedtodolist(completedArr)
+      cloneArray.splice(getTodoID,1)
+
+      setTodolist(cloneArray)
     }
-    setTodolist(cloneArray)
+   
+
   }
 
   const deleteTodo =(id) => {
@@ -116,6 +134,7 @@ const LandingPage = () => {
          
       <List>
         {
+          todolist.length > 0 && 
           todolist.map((eachTodo,key)=>{
           
             // let defaultStyle = {color:"black"}
@@ -134,6 +153,7 @@ const LandingPage = () => {
             else if(eachTodo.status === TODO_STATUS.DELETED) {
               defaultStyle = { ...defaultStyle, backgroundColor: 'lightgrey', color: 'white' }
             }
+            
           return(
           <ListItem 
             disablePadding
@@ -165,6 +185,58 @@ const LandingPage = () => {
          
       </List>
          
+      <List>
+        {
+          
+          completedtodolist.map((eachTodo,key)=>{
+          
+            // let defaultStyle = {color:"black"}
+            // if(eachTodo.status === TODO_STATUS.COMPLETED){
+            //   defaultStyle = {color:'blue'}
+            // }
+            // if(eachTodo.status === TODO_STATUS.DELETED){
+            //   defaultStyle = {color:'red'}
+            // }
+
+            let defaultStyle = { marginBottom: 5, paddingRight: 5}
+
+            if(eachTodo.status === TODO_STATUS.COMPLETED) {
+              defaultStyle = { ...defaultStyle, backgroundColor: '#0096FF', color: 'white' }
+            }
+            else if(eachTodo.status === TODO_STATUS.DELETED) {
+              defaultStyle = { ...defaultStyle, backgroundColor: 'lightgrey', color: 'white' }
+            }
+            
+          return(
+          <ListItem 
+            disablePadding
+            style={defaultStyle}
+            className='todoItemsContainer' 
+            key={key}
+            disabled={eachTodo.status === TODO_STATUS.DELETED ? true : false}
+            >
+            <ListItemButton   onClick={()=>editTodo(eachTodo)}>
+              <ListItemText primary={eachTodo.content} />
+            </ListItemButton>
+            {
+            eachTodo.status === TODO_STATUS.ACTIVE &&
+              <Button size="small" color="success" onClick={() => completedTodo(eachTodo.id)}>
+                <CheckCircleOutlineIcon />
+              </Button>
+          }
+
+          {
+            eachTodo.status !== TODO_STATUS.DELETED &&
+              <Button size="small" color="error" onClick={() => deleteTodo(eachTodo.id)}>
+                <RemoveCircleIcon />
+              </Button>
+          }
+          </ListItem>
+           )}
+          )
+        }
+         
+      </List>
       </div>
    </div>
  
