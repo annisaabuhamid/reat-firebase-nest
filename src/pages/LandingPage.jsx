@@ -32,6 +32,7 @@ const LandingPage = () => {
   
   const [todo,setTodo] = useState('');
   
+  
   const saveTodo = () =>{
     //condition where blank value is not accepted
     if(todo !== '') {
@@ -77,12 +78,35 @@ const LandingPage = () => {
 
   const deleteTodo =(id) => {
     const cloneArray = [...todolist] //[...] spread operator
-    const getTodoID = cloneArray.find((eachTodo) => eachTodo.id === id)
+    const completeArray = [...completedtodolist] //[...] spread operator
+    const allTodoArray =cloneArray.concat(completeArray)
+    const getTodoIndex = allTodoArray.findIndex((eachTodo) => eachTodo.id === id)
 
-    if (getTodoID){
-      getTodoID.status = TODO_STATUS.DELETED
+
+    if (getTodoIndex !== -1){
+
+      const deleteArr =[...deletedtodolist]
+
+
+      deleteArr.push({
+        ...cloneArray[getTodoIndex],
+        status: TODO_STATUS.DELETED
+      })
+
+      setDeletedtodolist(deleteArr)
+      
+      if(getTodoIndex > (cloneArray.length - 1)){
+        const getIndex = getTodoIndex - cloneArray.length
+        completeArray.splice(getIndex,1)
+        setCompletedtodolist(completeArray)
+
+      }else{
+        cloneArray.splice(getTodoIndex,1)
+        setTodolist(cloneArray)
+      }
+
     }
-    setTodolist(cloneArray)
+   
   }
 
   const editTodo = (todoObj) => {
@@ -106,6 +130,7 @@ const LandingPage = () => {
    }
 
   }
+
 
   return (
    <div className='container'>
@@ -142,6 +167,12 @@ const LandingPage = () => {
       
       <TodoList
         todoArr = {completedtodolist}
+        editTodo = {editTodo}
+        completedTodo = {completedTodo}
+        deleteTodo = {deleteTodo}
+      />
+       <TodoList
+        todoArr = {deletedtodolist}
         editTodo = {editTodo}
         completedTodo = {completedTodo}
         deleteTodo = {deleteTodo}
