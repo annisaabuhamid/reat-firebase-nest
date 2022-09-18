@@ -78,6 +78,15 @@ const LandingPage = () => {
     }
   }
 
+  
+  const keydownTemp = (evt) =>{
+
+    console.log('evt',evt)
+   if (evt.key === 'Enter' ){
+      saveTodo()
+   }
+
+  }
 
   return (
    <div className='container'>
@@ -88,6 +97,7 @@ const LandingPage = () => {
       label="Todo"
       variant="outlined"
       value ={todo}
+      onKeyDownCapture={keydownTemp}
       sx={{
         width:400,
       }} />
