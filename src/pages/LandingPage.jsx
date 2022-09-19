@@ -80,6 +80,7 @@ const LandingPage = () => {
     const cloneArray = [...todolist] //[...] spread operator
     const completeArray = [...completedtodolist] //[...] spread operator
     const allTodoArray =cloneArray.concat(completeArray)
+    
     const getTodoIndex = allTodoArray.findIndex((eachTodo) => eachTodo.id === id)
 
 
@@ -89,7 +90,7 @@ const LandingPage = () => {
 
 
       deleteArr.push({
-        ...cloneArray[getTodoIndex],
+        ...allTodoArray[getTodoIndex],
         status: TODO_STATUS.DELETED
       })
 
@@ -170,12 +171,14 @@ const LandingPage = () => {
         editTodo = {editTodo}
         completedTodo = {completedTodo}
         deleteTodo = {deleteTodo}
+        title="Completed"
       />
        <TodoList
         todoArr = {deletedtodolist}
         editTodo = {editTodo}
         completedTodo = {completedTodo}
         deleteTodo = {deleteTodo}
+        title="Deleted"
       />
       </div>
    </div>

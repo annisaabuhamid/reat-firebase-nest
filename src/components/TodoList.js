@@ -1,18 +1,24 @@
 import { React } from "react";
 import { TODO_STATUS } from "../constants/todoStatus";
-import { Button,ListItem,ListItemButton,ListItemText } from  '@mui/material';
+import { List,Button,ListItem,ListItemButton,ListItemText,Typography } from  '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 
-export const TodoList = ({ todoArr,editTodo,completedTodo,deleteTodo }) =>{
+export const TodoList = ({ todoArr,editTodo,completedTodo,deleteTodo,title = '' }) =>{
 
 
     return (
         
-            
-            todoArr.map((eachTodo,key)=>{
-            
+      todoArr.length > 0 && 
+    <div style={{ marginTop: 30 }}>
+      {
+        title !== '' &&
+        <Typography>{title}</Typography>
+      }
+      <List className='todoListContainer'>
+        {
+          todoArr.map((eachTodo, key) => {
               // let defaultStyle = {color:"black"}
               // if(eachTodo.status === TODO_STATUS.COMPLETED){
               //   defaultStyle = {color:'blue'}
@@ -32,10 +38,11 @@ export const TodoList = ({ todoArr,editTodo,completedTodo,deleteTodo }) =>{
               
             return(
             <ListItem 
-              disablePadding
+              
               style={defaultStyle}
               className='todoItemsContainer' 
               key={key}
+              disablePadding
               disabled={eachTodo.status === TODO_STATUS.DELETED ? true : false}
               >
               <ListItemButton   onClick={()=>editTodo(eachTodo)}>
@@ -55,8 +62,11 @@ export const TodoList = ({ todoArr,editTodo,completedTodo,deleteTodo }) =>{
                 </Button>
             }
             </ListItem>
-             )}
-            )
+             )
+            })
+          }
+          </List>
+        </div>
           
            
     )
