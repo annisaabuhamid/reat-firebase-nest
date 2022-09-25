@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Button,TextField } from  '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import {TODO_STATUS} from '../constants/todoStatus'; 
@@ -6,6 +6,8 @@ import {TODO_STATUS} from '../constants/todoStatus';
 // import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import '../styles/LandingPage.css';
 import { TodoList } from '../components/TodoList';
+import { firestore } from '../initFirebase';
+import {  collection, doc, setDoc , getDocs} from "firebase/firestore";
 
 
 
@@ -47,6 +49,8 @@ const LandingPage = () => {
         }
 
         cloneArray.push(transformTodo)
+
+        saveToFB(transformTodo)
         setTodolist(cloneArray)
         setTodo("")
 
@@ -131,6 +135,32 @@ const LandingPage = () => {
 
   }
 
+  const saveToFB = async (todo) => {
+    // Add a new document in collection "cities"
+    //await need to async
+      // await setDoc(addDoc(firestore, "cities", "LA"), {
+      //   name: "Los Angeles",
+      //   state: "CA",
+      //   country: "USA"
+      // });
+      await setDoc(doc(firestore, "anisa-react-todo-app",todo.id), todo);
+      alert('this already save')
+  }
+
+  const getAllTodo = async (todo) =>{
+    const querySnapshot = await getDocs(collection(firestore, "anisa-react-todo-app"));
+    const dataArr =[]
+    querySnapshot.forEach((doc)=>{
+      dataArr.push(doc.data())
+    });
+
+    setTodolist(dataArr)
+}
+  useEffect(() => {
+        // Get all the todo
+        getAllTodo()
+      }, []
+  )
 
   return (
    <div className='container'>
