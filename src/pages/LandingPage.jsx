@@ -7,7 +7,7 @@ import {TODO_STATUS} from '../constants/todoStatus';
 import '../styles/LandingPage.css';
 import { TodoList } from '../components/TodoList';
 import { firestore } from '../initFirebase';
-import {  collection, doc, setDoc , getDocs} from "firebase/firestore";
+import {  collection, doc, setDoc , getDocs ,onSnapshot} from "firebase/firestore";
 
 
 
@@ -26,6 +26,8 @@ const LandingPage = () => {
    * a. Deleted and completed record will be moved to another list
    */
 
+
+
   const [todolist, setTodolist ] = useState([]);
   
   const [completedtodolist, setCompletedtodolist ] = useState([]);
@@ -33,8 +35,27 @@ const LandingPage = () => {
   const [deletedtodolist, setDeletedtodolist ] = useState([]);
   
   const [todo,setTodo] = useState('');
-  
-  
+
+  const [isLoadDone,setLoadDone] = useState(false)
+
+  useEffect(() => {
+    if(isLoadDone === true) {
+      const unsub = onSnapshot(doc(firestore, "anisa-react-todo-app", "8szY9XM76YSh55vtIT3o"), (doc) => {
+          console.log("Current data: ", doc.data());
+
+          const data = doc.data();
+          const cloneTodo = [...todolist]
+          const getTndex = cloneTodo.findIndex((each) => each.id === data.id)
+          cloneTodo[getTndex] =data;
+          setTodolist(cloneTodo)
+      });
+
+      return () => {
+        unsub();
+      } 
+    }
+  },[isLoadDone])
+
   const saveTodo = () =>{
     //condition where blank value is not accepted
     if(todo !== '') {
@@ -155,11 +176,12 @@ const LandingPage = () => {
     });
 
     setTodolist(dataArr)
-}
-  useEffect(() => {
-        // Get all the todo
-        getAllTodo()
-      }, []
+    setLoadDone(true)
+  }
+    useEffect(() => {
+          // Get all the todo
+          getAllTodo()
+        }, []
   )
 
   return (
