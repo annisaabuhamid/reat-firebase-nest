@@ -7,25 +7,21 @@ import {TODO_STATUS} from '../constants/todoStatus';
 import '../styles/LandingPage.css';
 import { TodoList } from '../components/TodoList';
 import { firestore } from '../initFirebase';
-import {  collection, doc, setDoc , getDocs ,onSnapshot} from "firebase/firestore";
+import {  collection, doc, setDoc , getDocs ,onSnapshot, updateDoc, deleteDoc} from "firebase/firestore";
 
 
 
 const LandingPage = () => {
-  // TODO
+  
+  
+// TODO day 9
   /**
-   * 1. Create a input box - DONE
-   * 2. Create a save button - DONE
-   * 3. After click save, we need to save the record in a todo state - DONE
-   * 4. Display the saved todos - DONE
-   * 
-   * -- version v.0.2
-   * a. Have a edit, delete and complete option
-   * 
-   * -- version v.0.3
-   * a. Deleted and completed record will be moved to another list
-   */
+  delete
+  update
+  merge
+  login
 
+   */
 
 
   const [todolist, setTodolist ] = useState([]);
@@ -38,23 +34,23 @@ const LandingPage = () => {
 
   const [isLoadDone,setLoadDone] = useState(false)
 
-  useEffect(() => {
-    if(isLoadDone === true) {
-      const unsub = onSnapshot(doc(firestore, "anisa-react-todo-app", "8szY9XM76YSh55vtIT3o"), (doc) => {
-          console.log("Current data: ", doc.data());
+  // useEffect(() => {
+  //   if(isLoadDone === true) {
+  //     const unsub = onSnapshot(doc(firestore, "anisa-react-todo-app", "8szY9XM76YSh55vtIT3o"), (doc) => {
+  //         console.log("Current data: ", doc.data());
 
-          const data = doc.data();
-          const cloneTodo = [...todolist]
-          const getTndex = cloneTodo.findIndex((each) => each.id === data.id)
-          cloneTodo[getTndex] =data;
-          setTodolist(cloneTodo)
-      });
+  //         const data = doc.data();
+  //         const cloneTodo = [...todolist]
+  //         const getTndex = cloneTodo.findIndex((each) => each.id === data.id)
+  //         cloneTodo[getTndex] =data;
+  //         setTodolist(cloneTodo)
+  //     });
 
-      return () => {
-        unsub();
-      } 
-    }
-  },[isLoadDone])
+  //     return () => {
+  //       unsub();
+  //     } 
+  //   }
+  // },[isLoadDone, todolist])
 
   const saveTodo = () =>{
     //condition where blank value is not accepted
@@ -78,7 +74,28 @@ const LandingPage = () => {
   }
 }
   
-  const completedTodo =(id) => {
+  const updateStatus= async(todoID,status) => {
+
+    try{
+      const getDocbyId = doc(firestore,"anisa-react-todo-app",todoID);
+      await updateDoc(getDocbyId,{
+        status: status
+      });
+    }catch(err){
+        // console.log(err)
+    }
+
+  }
+  const completedTodo = async(id) => {
+
+
+    try{
+      const completeStatus = updateStatus(id,TODO_STATUS.COMPLETED)
+      console.log('status',completeStatus)
+      
+    }catch(err){
+
+    }
     const cloneArray = [...todolist] //[...] spread operator
     const getTodoID = cloneArray.findIndex((eachTodo) => eachTodo.id === id)
 
@@ -101,11 +118,29 @@ const LandingPage = () => {
 
   }
 
-  const deleteTodo =(id) => {
+  const deleteTodo = async(id) => {
+
+
+
+    //delete from firestore
+
+    try{
+      // const deleteStatus = updateStatus(id,TODO_STATUS.DELETED)
+      // console.log('status',deleteStatus)
+      await deleteDoc(doc(firestore,"anisa-react-todo-app",id));
+    }catch(err){
+
+    }
+
+
+
+
     const cloneArray = [...todolist] //[...] spread operator
     const completeArray = [...completedtodolist] //[...] spread operator
     const allTodoArray =cloneArray.concat(completeArray)
     const getTodoIndex = allTodoArray.findIndex((eachTodo) => eachTodo.id === id)
+
+   
 
 
     if (getTodoIndex !== -1){
@@ -175,14 +210,22 @@ const LandingPage = () => {
       dataArr.push(doc.data())
     });
 
-    setTodolist(dataArr)
+    const completedTodo = dataArr.filter(each => each.status === TODO_STATUS.COMPLETED)
+    setCompletedtodolist(completedTodo)
+
+    const deleteTodo = dataArr.filter(each => each.status === TODO_STATUS.DELETED)
+    setDeletedtodolist(deleteTodo)
+
+    const activeTodo = dataArr.filter(each => each.status === TODO_STATUS.ACTIVE)
+    setTodolist(activeTodo)
+
+   
     setLoadDone(true)
   }
-    useEffect(() => {
-          // Get all the todo
-          getAllTodo()
-        }, []
-  )
+  useEffect(() => {
+        // Get all the todo
+        getAllTodo()
+      }, [])
 
   return (
    <div className='container'>
@@ -216,13 +259,14 @@ const LandingPage = () => {
         completedTodo = {completedTodo}
         deleteTodo = {deleteTodo}
       />
-      
+      <h1>Completed List</h1>
       <TodoList
         todoArr = {completedtodolist}
         editTodo = {editTodo}
         completedTodo = {completedTodo}
         deleteTodo = {deleteTodo}
       />
+      <h1>Deleted List</h1>
        <TodoList
         todoArr = {deletedtodolist}
         editTodo = {editTodo}
