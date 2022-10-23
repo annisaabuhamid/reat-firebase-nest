@@ -18,6 +18,8 @@ const LandingPage = () => {
   /**
   delete
   update
+
+  day 10
   merge
   login
 
@@ -227,6 +229,36 @@ const LandingPage = () => {
         getAllTodo()
       }, [])
 
+
+  const saveToMerge = async (todo) => {
+      await setDoc(doc(firestore, "anisa-react-todo-app",'0689743f-212a-4a2d-9912-c694daee9e8c'),
+      {
+          name:"annisa",
+          day:"10", 
+      },{ merge: true });
+      
+  }
+
+  const saveToCreate = async (todo) => {
+    await setDoc(doc(firestore, "anisa-react-todo-app",'0689743f-212a-4a2d-9912-c694daee9e8c'),
+    {
+        month:"october", 
+        year:"2022",
+        today:"sunday"
+    });
+    
+  }
+
+  const saveToAppend = async (todo) => {
+    await updateDoc(doc(firestore, "anisa-react-todo-app",'0689743f-212a-4a2d-9912-c694daee9e8c'),
+    {
+        month:"october", 
+        year:"2022",
+        today:"friday"
+    });
+    
+  }
+
   return (
    <div className='container'>
     <div>
@@ -241,14 +273,36 @@ const LandingPage = () => {
         width:400,
       }} />
       <Button
-      onClick={saveTodo}
+      onClick={saveToMerge}
       variant="contained"
       size="large"
       sx={{
         height: 55,
         marginLeft: 2
       }}
-      >SAVE
+      >SAVE TO MERGE
+      </Button>
+
+      <Button
+      onClick={saveToAppend}
+      variant="contained"
+      size="large"
+      sx={{
+        height: 55,
+        marginLeft: 2
+      }}
+      >SAVE TO APPEND
+      </Button>
+
+      <Button
+      onClick={saveToCreate}
+      variant="contained"
+      size="large"
+      sx={{
+        height: 55,
+        marginLeft: 2
+      }}
+      >CREATE/UPDATE
       </Button>
       </div>
       <div>
